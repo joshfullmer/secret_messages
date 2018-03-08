@@ -8,7 +8,7 @@ class Atbash(Cipher):
                                    string.ascii_uppercase[::-1])}
 
     def encrypt(self, text):
-        return ''.join([self.cipher[char] for char in text.upper()])
+        return ''.join([self.cipher.get(char, ' ') for char in text.upper()])
 
     def decrypt(self, text):
-        return ''.join([self.cipher[char] for char in text.upper()])
+        return ''.join([self.cipher.get(char, ' ') for char in text.upper()])

@@ -1,6 +1,7 @@
 import os
 
 from atbash import Atbash
+from bifid import Bifid
 from caesar import Caesar
 
 CIPHER_INPUTS = ['1', 'C', 'CEASAR', '2', 'A', 'ATBASH',
@@ -40,14 +41,6 @@ def get_cipher():
             print_menu("Couldn't recognize input")
 
 
-def print_message(encrypt, message):
-    if encrypt:
-        en_or_de = "Encrypted"
-    else:
-        en_or_de = "Decrypted"
-    print("{} string: {}\n".format(en_or_de, message))
-
-
 if __name__ == '__main__':
     while True:
         print_menu()
@@ -71,17 +64,16 @@ if __name__ == '__main__':
             else:
                 cipher = Caesar(offset)
 
-            if encrypt:
-                print_message(encrypt, cipher.encrypt(message))
-            else:
-                print_message(encrypt, cipher.decrypt(message))
-
         if cipher_type == 'ATBASH':
             cipher = Atbash()
-            if encrypt:
-                print_message(encrypt, cipher.encrypt(message))
-            else:
-                print_message(encrypt, cipher.decrypt(message))
+
+        if cipher_type == 'BIFID':
+            cipher = Bifid()
+
+        if encrypt:
+            print("Encrypted string: {}".format(cipher.encrypt(message)))
+        else:
+            print("Decrypted string: {}".format(cipher.decrypt(message)))
 
         again = input("Encrypt or decrypt something else? (Y/n) ").upper()
         if again == 'N':

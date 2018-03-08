@@ -8,8 +8,10 @@ class Caesar(Cipher):
 
     def __init__(self, offset=3):
         self.offset = offset
-        self.FORWARD = string.ascii_uppercase + string.ascii_uppercase[:self.offset+1]
-        self.BACKWARD = string.ascii_uppercase[:self.offset+1] + string.ascii_uppercase
+        self.FORWARD = (string.ascii_uppercase +
+                        string.ascii_uppercase[:self.offset+1])
+        self.BACKWARD = (string.ascii_uppercase[:self.offset+1] +
+                         string.ascii_uppercase)
 
     def encrypt(self, text):
         output = []
@@ -34,6 +36,3 @@ class Caesar(Cipher):
             else:
                 output.append(self.BACKWARD[index-self.offset])
         return ''.join(output)
-
-
-

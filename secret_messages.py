@@ -1,4 +1,5 @@
 import os
+import re
 
 from affine import Affine
 from atbash import Atbash
@@ -63,6 +64,18 @@ def get_cipher():
             print_menu("Couldn't recognize input")
 
 
+def remove_non_alpha(text):
+    """
+    Ciphers that use transposition don't support numbers, punctuation, or any
+    other non-alphabet characters.
+
+    Rather than detect which support them and which don't, all non-alpha
+    characters are stripped.
+    """
+
+    return re.sub(r'[^A-Za-z]+', '', text)
+
+
 if __name__ == '__main__':
     while True:
 
@@ -80,7 +93,7 @@ if __name__ == '__main__':
             encrypt = False
 
         # Takes the message input and converts to uppercase
-        message = input("What is your message? ").upper()
+        message = remove_non_alpha(input("What is your message? ")).upper()
 
         # CAESAR
         # =====================================================================
@@ -109,7 +122,7 @@ if __name__ == '__main__':
         # =====================================================================
 
         if cipher_type == 'BIFID':
-            print("Enter a key below, or just hit Enter to use the default"
+            print("Enter a key below, or just hit Enter to use the default "
                   "key of: BGWKZQPNDSIOAXEFCLUMTHYVR")
             while True:
                 key = input(
@@ -170,11 +183,25 @@ if __name__ == '__main__':
                     continue
                 break
 
+        # One-time pad
+        pad_key = remove_non_alpha(
+            input("Provide One-time Pad (letters only, hit Enter to skip): ")
+            ).upper()
+
         # Output results
+        encrypt_type = "Encrypted" if encrypt else "Decrypted"
         if encrypt:
-            print("Encrypted string: {}".format(cipher.encrypt(message)))
+            message = cipher.one_time_pad(cipher.encrypt(message),
+                                          pad_key,
+                                          encrypt)
+            encrypt_type = "Encrypted"
         else:
-            print("Decrypted string: {}".format(cipher.decrypt(message)))
+            print("Decrypting...")
+            message = cipher.decrypt(cipher.one_time_pad(message,
+                                                         pad_key,
+                                                         encrypt))
+            encrypt_type = "Decrypted"
+        print("{} string: {}".format(encrypt_type, message))
 
         # Restart loop on user input
         again = input("Encrypt or decrypt something else? (Y/n) ").upper()

@@ -36,6 +36,10 @@ class Bifid(Cipher):
         Joins those lists, then recreates letters using new pairs of numbers
         """
 
+        # Bifids using a 5x5 Polybius square have all letters of the latin
+        # alphabet except for J, which is replaced with I
+        text = text.replace('J', 'I')
+
         # Turn the provided text into a list of row numbers and column numbers
         rows = [self.bifid[char][0] for char in text]
         cols = [self.bifid[char][1] for char in text]

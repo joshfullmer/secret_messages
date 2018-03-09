@@ -138,6 +138,7 @@ if __name__ == '__main__':
                     print("Key must have each letter of the alphabet, minus J")
                     continue
                 break
+
             cipher = Bifid(key)
 
         # AFFINE
@@ -191,12 +192,17 @@ if __name__ == '__main__':
         # Output results
         encrypt_type = "Encrypted" if encrypt else "Decrypted"
         if encrypt:
+
+            # Encrypt the string, apply one-time pad, then split into chunks
+            # of five characters
             message = cipher.one_time_pad(cipher.encrypt(message),
                                           pad_key,
                                           encrypt)
+            message = cipher.chunks_of_five(message)
             encrypt_type = "Encrypted"
         else:
-            print("Decrypting...")
+
+            # Remove one-time pad, then decrypt the string
             message = cipher.decrypt(cipher.one_time_pad(message,
                                                          pad_key,
                                                          encrypt))

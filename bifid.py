@@ -3,10 +3,14 @@ from ciphers import Cipher
 
 class Bifid(Cipher):
 
-    def __init__(self, key="BGWKZQPNDSIOAXEFCLUMTHYVR"):
+    def __init__(self, key=None):
+        if not key:
+            key = "BGWKZQPNDSIOAXEFCLUMTHYVR"
         row_col = [(r, c) for r in range(1, 6) for c in range(1, 6)]
         self.bifid = {char: rc for char, rc in zip(key, row_col)}
         self.reverse = {rc: char for char, rc in self.bifid.items()}
+        print(self.bifid)
+        print(self.reverse)
 
     def encrypt(self, text):
         rows = [self.bifid[char][0] for char in text]
